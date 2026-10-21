@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dein Name | Professioneller Lebenslauf</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --border: #30363d;
+            --timeline-line: #424b55;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Bento Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .col-span-2 { grid-column: span 2; }
+        .col-span-3 { grid-column: span 3; }
+
+        /* Profil-Header */
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            object-fit: cover;
+        }
+
+        h1 { font-size: 1.8rem; color: #fff; margin-bottom: 0.2rem; }
+        h2 { font-size: 1.3rem; color: #fff; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.1rem; color: #fff; }
+        
+        .tagline { color: var(--text-muted); font-size: 1rem; }
+
+        /* Interaktive Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: color 0.2s;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            color: var(--accent);
+        }
+
+        .tab-btn.active {
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Timeline (Lebenslauf-Struktur) */
+        .timeline {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            bottom: 5px;
+            width: 2px;
+            background-color: var(--timeline-line);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: calc(-1.5rem - 4px);
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--accent);
+        }
+
+        .time-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Badges & Kontakt */
+        .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .tag { background-color: #21262d; border: 1px solid var(--border); color: var(--text-main); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; }
+
+        .social-links { display: flex; flex-direction: column; gap: 0.8rem; }
+        .social-btn {
+            display: flex; align-items: center; justify-content: center; background-color: #21262d; color: #fff;
+            text-decoration: none; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border); font-weight: 500; font-size: 0.95rem; transition: background 0.2s;
+        }
+        .social-btn:hover { background-color: #30363d; }
+        
+        .print-btn {
+            background-color: var(--accent);
+            color: #0d1117;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .print-btn:hover { background-color: #8ec2ff; }
+
+        /* Projekt-Liste */
+        .project-item { margin-bottom: 1rem; }
+        .project-link { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .project-link:hover { text-decoration: underline; }
+        .project-desc { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .col-span-2, .col-span-3 { grid-column: span 1; }
+            .profile-card { flex-direction: column; text-align: center; }
+        }
+
+        /* Print-Optimierung für PDFs */
+        @media print {
+            body { background: #fff; color: #000; padding: 0; }
+            .card { border: none; background: #fff; color: #000; padding: 0; margin-bottom: 1.5rem; }
+            .grid { display: block; }
+            .social-links, .tabs-nav, .print-btn, footer { display: none !important; }
+            .tab-content { display: block !important; }
+            h1, h2, h3, .project-link { color: #000 !important; }
+            .tag { border: 1px solid #000; color: #000; background: none; }
+            .timeline::before { background-color: #000; }
+            .timeline-item::before { background-color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <main class="grid">
+            
+            <!-- Hauptprofil -->
+            <section class="card col-span-2 profile-card">
+                <img src="https://github.com" alt="Profilbild" class="avatar">
+                <div>
+                    <h1>Dein Name</h1>
+                    <p class="tagline">Deine Berufsbezeichnung / Fokus</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.95rem;">
+                        Kurze, prägnante Zusammenfassung deiner Identität und Ambitionen. Was treibt dich an, worin bist du Experte? Perfekt formuliert für Recruiter, die deine Seite scannen.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Kontakt & Print -->
+            <section class="card social-links">
+                <h2>Kontakt & Download</h2>
+                <button onclick="window.print()" class="social-btn print-btn">🖨️ Als CV / PDF drucken</button>
+                <a href="https://github.com" class="social-btn" target="_blank">🐙 GitHub</a>
+                <a href="https://linkedin.com" class="social-btn" target="_blank">💼 LinkedIn</a>
+            </section>
+
+            <!-- Tech Stack -->
+            <section class="card">
+                <h2>Kernkompetenzen</h2>
+                <div class="tags">
+                    <span class="tag">HTML / CSS</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">SQL / NoSQL</span>
+                    <span class="tag">DevOps</span>
+                    <span class="tag">Projektmanagement</span>
+                </div>
+            </section>
+
+            <!-- Dynamische CV / Portfolio Sektion -->
+            <section class="card col-span-2">
+                <nav class="tabs-nav">
+                    <button class="tab-btn active" onclick="switchTab('cv')">📄 Lebenslauf</button>
+                    <button class="tab-btn" onclick="switchTab('projects')">🚀 Projekte</button>
+                </nav>
+
+                <!-- TAB: LEBENSLAUF -->
+                <div id="cv" class="tab-content active">
+                    <h2>Berufserfahrung</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="time-meta">2024 - Heute</span>
+                            <h3>Senior Developer @ Unternehmen GmbH</h3>
+                            <p class="project-desc">Leitung von Webprojekten, Architektur-Entscheidungen und Mentoring von Junioren im Team.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="time-meta">2021 - 2024</span>
+                            <h3>Fullstack Entwickler @ Agentur AG</h3>
+                            <p class="project-desc">Entwicklung nativer Webanwendungen und Integration komplexer REST-Schnittstellen.</p>
+                        </div>
+                    </div>
+
+                    <h2 style="margin-top: 1.5rem;">Ausbildung</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="time-meta">2018 - 2021</span>
+                            <h3>B.Sc. Angewandte Informatik</h3>
+                            <p class="project-desc">Hochschule Musterstadt | Schwerpunkt: Software Engineering</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: PROJEKTE -->
+                <div id="projects" class="tab-content">
+                    <div class="project-item">
+                        <a href="#" class="project-link">🌐 Open-Source Library</a>
+                        <p class="project-desc">Ein leichtgewichtiges npm-Paket zur Optimierung von Data-Pipelines. Über 5k Downloads.</p>
+                    </div>
